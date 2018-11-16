@@ -1,19 +1,20 @@
 import pygame, random, time
 pygame.init()
-screen_height = 500
-screen_width = 500
+screen_height = 720
+screen_width = 1280
 gameDisplay = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('Snake')
+pygame.display.set_caption('KIPM ke Sapole')
 clock = pygame.time.Clock()
 global snake
 finish = True
+back = pygame.image.load('snake.jpg')
 def increaseSnakeLength():
         global snake
         snake.append([0, 0])
         
 def appearObject(x, y):
-        img = pygame.Surface((10, 10))
-        img.fill((0, 255, 0))
+        img = pygame.Surface((15, 15))
+        img.fill((0, 0, 255))
         gameDisplay.blit(img, (x, y))
 
 def isEaten(snake, food):
@@ -34,17 +35,17 @@ def isOut(snake):
                 return False
         
 def text_objects(text, font):
-    textSurface = font.render(text, True, (255, 255, 255))
+    textSurface = font.render(text, True, (0, 0, 0))
     return textSurface, textSurface.get_rect()
 
 def message(text):
-    largeText = pygame.font.Font(None,50)
+    largeText = pygame.font.Font(None,70)
     TextSurf, TextRect = text_objects(str(text), largeText)
     TextRect.center = ((screen_width/2),(screen_height/2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
 
-    time.sleep(2)
+    time.sleep(5)
 
     game()
 
@@ -60,7 +61,7 @@ def game():
         foodx, foody = 100, 200
         objects_eaten = 0
         direction = None
-        speed = 5
+        speed = 3
 
         while not finish:
             for event in pygame.event.get():
@@ -99,7 +100,7 @@ def game():
                 
 
             
-            
+            gameDisplay.blit(back, (0,0))
             snakeLength = len(snake)-1    
             while snakeLength > 0:
                 snake[snakeLength] = snake[snakeLength-1].copy()
@@ -121,15 +122,18 @@ def game():
             for i in snake:
                     gameDisplay.blit(snakeImg, i)
 
+            if objects_eaten != 0 and objects_eaten%10 == 0:
+                    speed += 1
+                    objects_eaten += 1
+                    print(speed)
             score(objects_eaten)
 
             if isOut(snake):
-                    message("OOps!!! OUT Try Again")
+                    message("OOps!!! OUT Try Again Score is "+str(objects_eaten))
                     
             pygame.display.update()
             gameDisplay.fill((0, 0, 0))    
-            clock.tick(60)
+            clock.tick(600)
 if finish!= False:
         game()
 pygame.quit()
-
